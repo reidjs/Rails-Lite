@@ -123,7 +123,7 @@ describe Router do
         get index_route
         post post_route
       end
-
+      # debugger
       router = Router.new
 
       expect(router).to receive(:get).with(index_route)

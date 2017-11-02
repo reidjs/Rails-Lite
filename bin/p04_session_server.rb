@@ -1,10 +1,14 @@
 require 'rack'
 require_relative '../lib/controller_base'
-
+require 'pry'
 class MyController < ControllerBase
   def go
+    # binding.pry
     session["count"] ||= 0
+    # binding.pry
     session["count"] += 1
+    # binding.pry
+
     render :counting_show
   end
 end

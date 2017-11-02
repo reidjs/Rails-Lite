@@ -24,6 +24,8 @@ class ControllerBase
 
     @res.header['Location'] = url
     @res.status = 302
+    @session.store_session(@res)
+
     @already_built_response = true
   end
 
@@ -36,7 +38,8 @@ class ControllerBase
 
     @res['Content-Type'] = content_type
     # @res.body = ["Hello World #{content}"]
-    @res.write("Hello world #{content}")
+    @res.write("#{content}")
+    @session.store_session(@res)
     @already_built_response = true
 
     # @res['Content_Type'] = content_type
@@ -55,17 +58,24 @@ class ControllerBase
             controller +
             template
     f = File.read(path)
-    binding.pry
+    # binding.pry
     result = ERB.new(f).result(binding)
     render_content(result, "text/html")
     # binding.pry
   end
 
   # method exposing a `Session` object
+  #initializes session if one doesn't already exist
   def session
+    @session ||= Session.new(@req)
+    # @session.store_session(@res) #
+    @session
   end
 
   # use this with the router to call action_name (:index, :show, :create...)
   def invoke_action(name)
+    self.send(name)
+    # Router.send(name)
+    # binding.pry
   end
 end
